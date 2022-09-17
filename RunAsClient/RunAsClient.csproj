@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NoWin32Manifest>true</NoWin32Manifest>
+    <PlatformTarget>x64</PlatformTarget>
+    <Authors>Andrey Kachamkin</Authors>
+    <Copyright>(C) 2022 Andrey Kachamkin</Copyright>
+	<PublishReadyToRun>true</PublishReadyToRun>
+	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	<ApplicationIcon>AspNetCoreModule.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="AspNetCoreModule.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Crypt\Crypt.vcxproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="app.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>app.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="app.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>app.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

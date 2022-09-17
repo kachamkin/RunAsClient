@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+	<Bundle Name="Run As Service" Version="1.0.0.0" Manufacturer="Andrey Kachamkin" UpgradeCode="9bd69d9f-a540-4934-8de4-ce0dca0f5623">
+		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLargeLicense">
+			<bal:WixStandardBootstrapperApplication LicenseUrl=""/>
+		</BootstrapperApplicationRef>
+		<Chain>
+			<PackageGroupRef Id="Net6"/>
+			<MsiPackage SourceFile="C:\Users\kacha\source\repos\RunAsSvc\WixRunAsSvcSetup\bin\Release\RunAsSvcSetup.msi" DisplayInternalUI="yes" />
+		</Chain>
+	</Bundle>
+
+	<Fragment>
+		<PackageGroup Id="Net6">
+			<ExePackage InstallCommand="/q" DetectCondition="Installed" Name="windowsdesktop-runtime-6.0.6-win-x64.exe" Compressed="no" DownloadUrl="https://download.visualstudio.microsoft.com/download/pr/9d6b6b34-44b5-4cf4-b924-79a00deb9795/2f17c30bdf42b6a8950a8552438cf8c1/windowsdesktop-runtime-6.0.6-win-x64.exe" Id="Net6Setup">
+				<RemotePayload Version="6.0.6.0" Size="57665648" Hash="06E76968E4CE87C77F34AE5AFA6D63B0DEDFE6D2" ProductName="Runtime components"  Description="Runtime components"/>
+			</ExePackage>
+		</PackageGroup>
+	</Fragment>
+	
+</Wix>

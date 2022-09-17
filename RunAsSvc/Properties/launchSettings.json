@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "RunAsSvc": {
+      "commandName": "Project",
+      "commandLineArgs": "500",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true
+    }
+  }
+}

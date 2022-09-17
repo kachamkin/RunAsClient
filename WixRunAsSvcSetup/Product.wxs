@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="Run As Service" Language="1033" Version="1.0.0.0" Manufacturer="Andrey Kachamkin" UpgradeCode="76010BB6-D94A-47B8-9DF6-1DDBBED1E401">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64" Comments="Run As Service and Client"/>
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="Run As" Display='expand' ConfigurableDirectory='INSTALLFOLDER' >
+			<Condition Level='1'>NOT Installed</Condition>
+			<!--<ComponentGroupRef Id="ProductComponents" />-->
+			<Feature Id="Server" Title="Server" Display='expand' ConfigurableDirectory='INSTALLFOLDER' >
+				<!--<Condition Level="2">NOT Installed AND MsiSelectionTreeSelectedFeature="Server"</Condition>-->
+				<ComponentRef Id="Server" />
+			</Feature>
+			<Feature Id="Client" Title="Client" Display='expand' ConfigurableDirectory='INSTALLFOLDER' >
+				<!--<Condition Level="2">NOT Installed AND MsiSelectionTreeSelectedFeature="Client"</Condition>-->
+				<Feature Id="ProgramMenuDir" Title="Program menu" Display='expand'>
+					<ComponentRef Id="ProgramMenuDir" />
+				</Feature>
+				<ComponentRef Id="Client" />
+			</Feature>
+		</Feature>
+
+		<Property Id="ARPPRODUCTICON" Value="RunAsClient.exe" />
+
+		<Icon Id="RunAsClient.exe" SourceFile='C:\Users\kacha\source\repos\RunAsSvc\RunAsClient\bin\Release\net6.0-windows\publish\RunAsClient.exe' />
+		<UIRef Id="WixUI_FeatureTree" />
+		<WixVariable Id="WixUILicenseRtf" Value="C:\Users\kacha\source\repos\SignTool\SignTool\bin\Release\net6.0-windows\publish\win-x64\License.rtf" />
+
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+
+			<Directory Id="ProgramFiles64Folder">
+				<Directory Id="DirManufacturer" Name="Andrey Kachamkin">
+					<Directory Id="INSTALLFOLDER" Name="Run As Service" />
+				</Directory>
+			</Directory>
+
+			<Directory Id="ProgramMenuFolder" Name="Programs">
+				<Directory Id="ProgramMenuDir" Name="Andrey Kachamkin">
+
+				</Directory>
+			</Directory>
+
+			<Directory Id="DesktopFolder" Name="Desktop" />
+
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+
+			<Component Id="ProgramMenuDir" Guid="3D2DDF33-24C7-4578-8F9E-5F05D1827A1E" Win64="yes">
+				<RemoveFolder Id='ProgramMenuDir' Directory='ProgramMenuDir' On='uninstall' />
+				<RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+			</Component>
+
+			<Component Id='Server' Guid='2ECCFE96-C0C0-40D2-BBDD-C38190AD06BB' Win64='yes'>
+				<File Id='RunAsSvc.exe' Name='RunAsSvc.exe' Source='C:\Users\kacha\source\repos\Service\x64\Release\RunAsSvc.exe' />
+				<ServiceInstall Id='RunAsSvc.exe' DisplayName='Run As Service' Name='RunAsSvc' ErrorControl='normal' Start='auto' Type='ownProcess' />
+				<ServiceControl Id='RunAsSvc.exe' Name='RunAsSvc' Start='install' Stop='both' Remove='uninstall' />
+				<File Id='PrevTermCPP.exe' Name='PrevTermCPP.exe' Source='C:\Users\kacha\source\repos\Service\x64\Release\PrevTermCPP.exe' />
+				<File Id='i64BitHookDLL.dll' Name='64BitHookDLL.dll' Source='C:\Users\kacha\source\repos\Service\x64\Release\64BitHookDLL.dll' />
+			</Component>
+			<Component Id='Client' Guid='BBA2B7B6-90FC-4967-9F75-8C93B23B0AA2' Win64='yes'>
+				<File Id='RunAsClient.exe' Name='RunAsClient.exe' Source='C:\Users\kacha\source\repos\RunAsSvc\RunAsClient\bin\Release\net6.0-windows\publish\RunAsClient.exe' KeyPath='yes'>
+					<Shortcut Id="desktopClient" Directory="DesktopFolder" Name="Run As Client" WorkingDirectory='INSTALLFOLDER' Advertise="yes" Icon= "RunAsClient.exe"/>
+					<Shortcut Id="programMenuClient" Directory="ProgramMenuDir" Name="Run As Client" WorkingDirectory='INSTALLFOLDER' Advertise="yes" Icon= "RunAsClient.exe"/>
+				</File>
+			</Component>
+
+		</ComponentGroup>
+	</Fragment>
+
+</Wix>
