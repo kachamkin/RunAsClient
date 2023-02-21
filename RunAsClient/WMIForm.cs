@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,9 +19,27 @@ namespace RunAsClient
         private int currIndex = 0;
         private int firstDisplayed = 0;
 
+        private string[]  GetClasses()
+        {
+            List<String> classes = new List<string>();
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher
+                        (new ManagementScope("root/cimv2"),
+                        new WqlObjectQuery("SELECT * FROM meta_class"));
+            List<string> classNames = new();
+            ManagementObjectCollection objectCollection = searcher.Get();
+            foreach (ManagementClass wmiClass in objectCollection)
+            {
+                string stringified = wmiClass.ToString();
+                string[] parts = stringified.Split(new char[] { ':' });
+                classes.Add(parts[1]);
+            }
+            return classes.OrderBy(s => s).ToArray();
+        }
+
         public WMIForm(ClientForm _topForm, string _sData)
         {
             InitializeComponent();
+            Task.Run(() => className.Items.AddRange(GetClasses()));
             topForm = _topForm;
             UpdateData(_sData);
         }
@@ -166,5 +185,8 @@ namespace RunAsClient
         {
             Clipboard.SetDataObject(procGrid.GetClipboardContent());
         }
+
+        private void className_SelectedValueChanged(object sender, EventArgs e) =>
+            topForm.SendMessage("#devices#" + className.Text);
     }
 }

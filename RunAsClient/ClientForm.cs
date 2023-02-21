@@ -85,6 +85,7 @@ namespace RunAsClient
             //dataToEncrypt += "\0";
 
             byte[] data = new byte[rsa.KeySize / 8 - 2 * hashSize / 8 - 2];
+            //byte[] data = new byte[rsa.KeySize / 8 - 11];
             int keySizeInBytes = rsa.KeySize / 8;
 
             using MemoryStream fs = new(dataToEncrypt);
@@ -96,6 +97,7 @@ namespace RunAsClient
                 read = fs.Read(data, 0, (int)(fs.Length - total > data.Length ? data.Length : fs.Length - total));
                 if (read > 0)
                     ms.Write(rsa.Encrypt(data, RSAEncryptionPadding.CreateOaep(new HashAlgorithmName(hashAlg))), 0, keySizeInBytes);
+                    //ms.Write(rsa.Encrypt(data, RSAEncryptionPadding.Pkcs1));
                 total += read;
             }
             while (read > 0);
@@ -230,6 +232,7 @@ namespace RunAsClient
             cs.Close();
             ms.Close();
 
+            //return Encoding.UTF8.GetString(ms.ToArray());
             return Encoding.Unicode.GetString(ms.ToArray());
         }
 
@@ -249,7 +252,7 @@ namespace RunAsClient
             reader.Close();
             ms.Close();
 
-            return AESDecrypt(Encoding.Unicode.GetString(ms.ToArray()).Replace("\0", "")).Split('\0')[0];
+            return AESDecrypt(Encoding.UTF8.GetString(ms.ToArray()).Replace("\0", "")).Split('\0')[0];
         }
 
         public void SendMessage(string textToSend, string actionText = "", bool noMB = false, bool dragDrop = false)
@@ -264,7 +267,9 @@ namespace RunAsClient
                 aes?.Dispose();
                 aes = new()
                 {
+                    //Mode = CipherMode.ECB,
                     Mode = CipherMode.CBC,
+                    //Padding = PaddingMode.Zeros,
                     Padding = PaddingMode.PKCS7,
                     KeySize = 256,
                     IV = new byte[16]
@@ -410,7 +415,7 @@ namespace RunAsClient
                     case "Shutdown":
                         textToSend = "#shutdown#";
                         break;
-                    case "Logoff":
+                    case "Logoff all":
                         textToSend = "#logoff#";
                         break;
                     case "Logoff user":

@@ -38,7 +38,7 @@
             this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.callMethodToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.className = new System.Windows.Forms.TextBox();
+            this.className = new System.Windows.Forms.ComboBox();
             this.search = new System.Windows.Forms.TextBox();
             this.method = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.procGrid)).BeginInit();
@@ -131,9 +131,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.className.Location = new System.Drawing.Point(4, 2);
             this.className.Name = "className";
-            this.className.PlaceholderText = "WMI class";
             this.className.Size = new System.Drawing.Size(620, 23);
             this.className.TabIndex = 2;
+            this.className.SelectedValueChanged += new System.EventHandler(this.className_SelectedValueChanged);
             this.className.KeyDown += new System.Windows.Forms.KeyEventHandler(this.className_KeyDown);
             this.className.Leave += new System.EventHandler(this.className_Leave);
             // 
@@ -184,7 +184,7 @@
         #endregion
 
         private DataGridView procGrid;
-        private TextBox className;
+        private ComboBox className;
         private TextBox search;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem refreshToolStripMenuItem;
